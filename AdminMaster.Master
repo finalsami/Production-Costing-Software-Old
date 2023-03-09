@@ -1,0 +1,454 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="AdminMaster.master.cs" Inherits="Production_Costing_Software.AdminMaster" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <script src="Content/Js/jquery.min.js"></script>
+
+    <title></title>
+    <script src="Content/bootstrap-5.1.0-dist/js/bootstrap.min.js"></script>
+    <link href="Content/bootstrap-5.1.0-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/GridViewStyle.css" rel="stylesheet" />
+    <%--<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css" type="text/javascript" crossorigin="anonymous"></script>--%>
+
+
+    <%--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>--%>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+    <%--    <script src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+
+    <link href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css" rel="stylesheet">--%>
+
+
+
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <link href="Content/Admin/css/styles.css" rel="stylesheet" />
+    <link href="Content/Other/ActiveLink.css" rel="stylesheet" />
+
+    <%--    <link href="Content/Other/back2Top.css" rel="stylesheet" />
+    <script src="Content/Other/Back2Top.js"></script>--%>
+
+    <link href="Content/Other/ButtonShadow.css" rel="stylesheet" />
+    <%--        <script>
+            function clickSingleA(a) {
+                items = document.querySelectorAll('.single.active');
+
+                if (items.length) {
+                    items[0].className = 'single';
+                }
+
+                a.className = 'single active';
+            }
+        </script>--%>
+    <%--    <script>
+        $(document).ready(function () {
+            $('.dropdown-toggle').dropdown();
+        });
+    </script>--%>
+    <script type="text/javascript" language="javascript">
+        function DisableBackButton() {
+            window.history.forward()
+        }
+        DisableBackButton();
+        window.onload = DisableBackButton;
+        window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
+        window.onunload = function () { void (0) }
+    </script>
+
+    <%--    <script type="text/javascript">
+        var dialog = document.getElementById("staticBackdrop");
+        dialog.className += " in";
+        dialog.style.display = "block";
+    </script>--%>
+
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial;
+        }
+
+        .modalLoading {
+            position: fixed;
+            z-index: 1030;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            background-color: grey;
+            opacity: 0.6;
+        }
+
+        .centerLoading {
+            z-index: 1031;
+            margin: 290px auto;
+            padding: 10px;
+            width: 300px;
+            opacity: 1;
+        }
+
+            .centerLoading img {
+                height: 150px;
+                width: 250px;
+            }
+    </style>
+
+    <script>
+        $(function () {
+
+            $("li").click(function () {
+                $("#frm").before("<div class=\"modalLoading\">  <div class= \"centerLoading\" ><img alt=\"\" src=\"Content/LogoImage/gifntext-gif.gif\" /></div > </div >").fadeIn();
+            });
+
+        });
+    </script>
+</head>
+<asp:ContentPlaceHolder ID="head" runat="server">
+</asp:ContentPlaceHolder>
+
+<body class="sb-nav-fixed">
+    <form runat="server" id="frm">
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+        <%--Lables--%>
+        <asp:Label ID="lblCompanyMasterList_Name" runat="server" Text="" Visible="false"></asp:Label>
+        <asp:Label ID="lblRoleId" runat="server" Text="" Visible="false"></asp:Label>
+        <asp:Label ID="lblUserId" runat="server" Text="" Visible="false"></asp:Label>
+        <asp:Label ID="lblGroupId" runat="server" Text="" Visible="false"></asp:Label>
+        <asp:Label ID="lblCompanyMasterList_Id" runat="server" Text="" Visible="false"></asp:Label>
+        <asp:Label ID="lblUserNametxt" runat="server" Text="" Visible="false"></asp:Label>
+        <asp:Label ID="UserIdAdmin" Visible="false" runat="server" Text=""></asp:Label>
+        <%-----------------------%>
+        <div class="container">
+            <div class="row mb-3">
+
+                <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+                    <!-- Navbar Brand-->
+                    <div class="col-sm-2">
+                        <a class="navbar-brand ps-1" href="MainCategory.aspx">
+                            <div style="text-shadow: 2px 2px rgb(7 10 10 / 40%); margin-bottom: 25px; margin-left: 10px; color: lime; font-family: math;">
+                                PCS
+                            </div>
+                            <%--<img src="Content/Images/log.png" style="/*text-shadow: 2px 2px rgba(0, 0, 0, 0.4);height:80px;width:300px*/" />--%>
+                        </a>
+                    </div>
+                    <div>
+                        <button class="btn btn-link btn-lg order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+                    </div>
+                    <div class="col-auto">
+                        <%--<img src="Content/Other/Right%20Arrow.png" style="width: 15px; height: 15px" />--%>
+                        <%--<a class="nav-link collapsed" href="comp_TradeNameMaster.aspx" style="font-size: large; font-weight: 900; box-shadow: 0px 10px 10px -10px rgba(0, 0, 0, 0.4); color: whitesmoke">Company Master</a>--%>
+                        <asp:DropDownList runat="server" ID="CompanyListDropdown" class="btn btn-success btn-sm dropdown-toggle" Style="text-shadow: 2px 8px 6px rgba(0,0,0,0.2), 0px -5px 35px rgba(255,255,255,0.3);"
+                            AutoPostBack="true" OnSelectedIndexChanged="CompanyListDropdown_SelectedIndexChanged">
+                        </asp:DropDownList>
+                    </div>
+
+                    <div class="col-auto m-2">
+                        <ul class="navbar-nav">
+                            <asp:DropDownList runat="server" Style="text-shadow: 2px 8px 6px rgba(0,0,0,0.2), 0px -5px 35px rgba(255,255,255,0.3);"
+                                ID="AdminDropdown" OnSelectedIndexChanged="AdminDropdown_SelectedIndexChanged" class="btn btn-danger btn-sm dropdown-toggle" AutoPostBack="true">
+                                <asp:ListItem Selected="True" Value="0"></asp:ListItem>
+                                <asp:ListItem Value="1" Text="Logout"></asp:ListItem>
+                            </asp:DropDownList>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <div id="layoutSidenav" style="width: fit-content">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark " id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div id="DivWelcome" runat="server">
+                                <%--<div class="sb-sidenav-menu-heading">Purchase</div>--%>
+                                <a class="nav-link" href="WelcomePage.aspx" style="color: whitesmoke;">Welcome</a>
+
+                            </div>
+
+                            <div id="DivPriceHidden" runat="server" visible="false">
+                                <%--<div class="sb-sidenav-menu-heading">Purchase</div>--%>
+                                <a class="nav-link " style="cursor: pointer" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                    <div class="sb-nav-link-icon" id="HdPriceMasterId" runat="server" visible="false" style="color: whitesmoke;">
+                                        <img src="Content/icons/price.png" style="height: 25px; width: 25px" />
+                                        Price Master
+                                    </div>
+
+                                    <div class="sb-sidenav-collapse-arrow" id="ArrPriceMasterId" runat="server" visible="false"><i class="fas fa-angle-down"></i></div>
+
+                                </a>
+
+                                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <ul id="ulPriceid" runat="server">
+                                            <li id="liRMPriceMasterid" runat="server" visible="false"><a class="nav-link" href="RMPriceMaster.aspx" style="color: whitesmoke;">RM Price Master</a></li>
+                                            <li id="liPM_RM_PriceMasterid" runat="server" visible="false"><a class="nav-link" href="PM_RM_PriceMaster.aspx" style="color: whitesmoke;">PM RM Price Master</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+
+                            <%--<div class="sb-sidenav-menu-heading">Costing</div>--%>
+                            <div id="DivCostHidden" runat="server" visible="false">
+                                <a class="nav-link" style="cursor: pointer" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
+                                    <div class="sb-nav-link-icon" id="HdCostId" runat="server" visible="false" style="color: whitesmoke;">
+                                        <img src="Content/icons/cost.png" style="height: 25px; width: 25px" />
+                                        Cost
+                                    </div>
+
+                                    <div class="sb-sidenav-collapse-arrow" id="ArrCostId" runat="server" visible="false"><i class="fas fa-angle-down"></i></div>
+
+                                </a>
+                                <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <ul id="ulSubCostingid" runat="server" visible="false">
+                                            <li id="liCostVariableid" runat="server"><a class="nav-link " href="CostVariableMaster.aspx">Cost Variable Master</a></li>
+                                            <li id="liBulkRecipeBOMid" runat="server" visible="false"><a class="nav-link " href="BulkRecipe(BOM).aspx" style="color: whitesmoke;">BulkRecipe(BOM)</a></li>
+                                            <li id="liProductwiseLabourCostid" runat="server" visible="false"><a class="nav-link" href="ProductwiseLabourCost.aspx" style="color: whitesmoke;">Productwise Labour Cost</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <%--<div class="sb-sidenav-menu-heading">Report</div>--%>
+                            <div id="DivReportHidden" runat="server" visible="false">
+                                <a class="nav-link " style="cursor: pointer" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1234" aria-expanded="false" aria-controls="collapseLayouts1234">
+                                    <div class="sb-nav-link-icon" id="HDReportingid" runat="server" visible="false" style="color: whitesmoke;">
+                                        <img src="Content/icons/report.png" />
+                                        Reporting
+                                    </div>
+
+
+                                    <div class="sb-sidenav-collapse-arrow" id="ArrReportId" runat="server" visible="false"><i class="fas fa-angle-down"></i></div>
+
+                                </a>
+                                <div class="collapse" id="collapseLayouts1234" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <ul id="ulSubReportid" runat="server">
+                                            <li id="liFinishGoodsPricingReportid" runat="server" visible="false">
+                                                <a class="nav-link" href="FinishGoodsPricingReport.aspx" style="color: whitesmoke;">Finish Goods Pricing Report</a></li>
+                                            <li id="liBulkProductPriceListid" runat="server" visible="false"><a class="nav-link text-decoration-line-through disabled" href="BulkProductPriceList.aspx">Bulk Product Price List</a>  </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <%--<div class="sb-sidenav-menu-heading">Category</div>--%>
+                            <div id="DivCategoryHidden" runat="server" visible="false">
+                                <a class="nav-link " style="cursor: pointer" data-bs-toggle="collapse" data-bs-target="#collapseLayouts12345" aria-expanded="false" aria-controls="collapseLayouts12345">
+                                    <div class="sb-nav-link-icon" id="DHCategoriesid" runat="server" visible="false" style="color: whitesmoke;">
+                                        <img src="Content/icons/categories.png" style="height: 25px; width: 25px" />
+                                        Categories
+                                    </div>
+
+
+                                    <div class="sb-sidenav-collapse-arrow" id="ArrCategoryId" runat="server" visible="false"><i class="fas fa-angle-down"></i></div>
+
+                                </a>
+                                <div class="collapse" id="collapseLayouts12345" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <ul id="ulCategoriesid" runat="server" visible="false">
+
+                                            <li id="liMainCategoryid" runat="server" visible="false"><a class="nav-link" href="MainCategory.aspx" style="color: whitesmoke;">Main Category</a></li>
+                                            <li id="liRMCategoryid" runat="server" visible="false"><a class="nav-link" href="RMCategory.aspx" style="color: whitesmoke;">RM Category</a></li>
+                                            <li id="liPM_RM_Categoryid" runat="server" visible="false"><a class="nav-link" href="PM_RM_Category.aspx" style="color: whitesmoke;">PM RM Category</a></li>
+                                            <li id="liPackingCategoryid" runat="server" visible="false"><a class="nav-link" href="PackingCategory.aspx" style="color: whitesmoke;">Packing  Category</a></li>
+                                            <li id="liPackingStyleCategoryid" runat="server" visible="false"><a class="nav-link" href="PackingStyleCategory.aspx" style="color: whitesmoke;">Packing Size Category Master</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <%--<div class="sb-sidenav-menu-heading">Masters</div>--%>
+                            <div id="DivMasterHidden" runat="server" visible="false">
+                                <a class="nav-link" style="cursor: pointer" data-bs-toggle="collapse" data-bs-target="#collapseLayouts123456" aria-expanded="false" aria-controls="collapseLayouts123456">
+                                    <div class="sb-nav-link-icon" id="HDMastersid" runat="server" visible="false" style="color: whitesmoke;">
+                                        <img src="Content/icons/masters.png" style="height: 25px; width: 25px" />
+                                        Masters
+                                    </div>
+
+
+                                    <div class="sb-sidenav-collapse-arrow" id="ArrMasterId" runat="server" visible="false"><i class="fas fa-angle-down"></i></div>
+
+                                </a>
+                                <div class="collapse" id="collapseLayouts123456" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <ul id="ulMastersid" runat="server" visible="false">
+
+                                            <li id="liRM_Masterid" runat="server" visible="false"><a class="nav-link" href="RM_Master.aspx" style="color: whitesmoke;">RM Master</a></li>
+                                            <li id="liBulkProductMasterid" runat="server" visible="false"><a class="nav-link" href="BulkProductMaster.aspx" style="color: whitesmoke;">Bulk Product Master</a></li>
+                                            <li id="liFormulationMasterid" runat="server" visible="false"><a class="nav-link" href="FormulationMaster.aspx" style="color: whitesmoke;">Formulation Master</a></li>
+                                            <li id="liProductInterestMasterid" runat="server" visible="false"><a class="nav-link" href="ProductInterestMaster.aspx" style="color: whitesmoke;">Product Interest Master</a></li>
+                                            <li id="liPM_RM_Masterid" runat="server" visible="false"><a class="nav-link" href="PM_RM_Master.aspx" style="color: whitesmoke;">PM RM Master</a></li>
+                                            <li id="liPackingStyleNameid" runat="server" visible="false"><a class="nav-link" href="PackingStyleName.aspx" style="color: whitesmoke;">Packing Style Name</a></li>
+                                            <li id="liPackingMaterialMasterid" runat="server" visible="false"><a class="nav-link" href="PackingMaterialMaster.aspx" style="color: whitesmoke;">Product Packing Material Master</a></li>
+                                            <li id="liPackingStyleMasterid" runat="server" visible="false"><a class="nav-link" href="PackingStyleMaster.aspx" style="color: whitesmoke;">Packing Style Labour & Power Costing Master</a></li>
+                                            <li id="liPackingDifferenceMaster" runat="server" visible="false"><a class="nav-link" href="PackingDifferenceMaster.aspx" style="color: whitesmoke;">Packing Difference Master</a></li>
+
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+
+                            <%--<div class="sb-sidenav-menu-heading">Company</div>--%>
+                            <div id="DivCompanyHidden" runat="server" visible="false">
+                                <a class="nav-link collapsed" style="cursor: pointer" data-bs-toggle="collapse" data-bs-target="#collapseLayouts123" aria-expanded="false" aria-controls="collapseLayouts123">
+                                    <div class="sb-nav-link-icon" id="HDCompanyid" runat="server" visible="false" style="color: whitesmoke;">
+                                        <img src="Content/icons/company.png" style="height: 25px; width: 25px" />
+                                        Company
+                                    </div>
+
+
+                                    <div class="sb-sidenav-collapse-arrow" id="ArrComapanyId" runat="server" visible="false"><i class="fas fa-angle-down"></i></div>
+
+                                </a>
+                                <div class="collapse" id="collapseLayouts123" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <ul id="ulCompanyMasterid" runat="server" visible="false">
+                                            <li id="liCompanyMasterid" runat="server" visible="false">
+                                                <a class="nav-link" href="CompanyMaster.aspx" style="color: whitesmoke;">Company Master</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <div id="DivUserMgmtHidden" runat="server" visible="false">
+                                <a class="nav-link " style="cursor: pointer" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1234567" aria-expanded="false" aria-controls="collapseLayouts1234567">
+                                    <div class="sb-nav-link-icon" id="HDUserManagementid" runat="server" visible="false" style="color: whitesmoke; align-items: center">
+                                        <img src="Content/icons/people.png" style="height: 25px; width: 25px" />User Management
+                                    </div>
+
+
+                                    <div class="sb-sidenav-collapse-arrow" id="ArrUsermgntId" runat="server" visible="false"><i class="fas fa-angle-down"></i></div>
+
+                                </a>
+                                <div class="collapse" id="collapseLayouts1234567" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <ul id="ulUserManaghementid" runat="server" visible="false">
+                                            <li id="liUserMasterid" runat="server" visible="false">
+                                                <a class="nav-link" href="UserMaster.aspx" style="color: whitesmoke;">User</a></li>
+                                            <li id="liRoleMasterid" runat="server" visible="false"><a class="nav-link" href="RoleMaster.aspx" style="color: whitesmoke;">Role</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+
+                            <%-------------------EsitmationReport----------------------------%>
+
+                            <div id="DivEsitmationReport" runat="server" visible="false">
+                                <a class="nav-link " data-bs-toggle="collapse" style="color: white; cursor: pointer" data-bs-target="#collapseLayouts2222" aria-expanded="false" aria-controls="collapseLayouts2222">
+                                    <div class="sb-nav-link-icon" id="DivPriceEsitmationReport" runat="server" visible="false" style="color: whitesmoke;">
+                                        <img src="Content/icons/estimate.png" />
+                                        Price Esitmation
+                                    </div>
+                                    <div class="sb-sidenav-collapse-arrow" id="DivArrEstimateReport" runat="server" visible="false"><i class="fas fa-angle-down"></i></div>
+
+                                </a>
+
+                                <div class="collapse" id="collapseLayouts2222" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <ul id="ulEsitmation" runat="server">
+                                            <li id="liRMEstimationReport" runat="server" style="color: white" visible="false"><a class="nav-link" href="Report_RMEstimation.aspx" style="color: whitesmoke;">RM Estimation</a></li>
+                                            <li id="liPMRMEstimationReport" runat="server" style="color: white" visible="false"><a class="nav-link" href="Report_PMRMEstimation.aspx" style="color: whitesmoke;">PM RM Estimation</a></li>
+                                            <li id="liPriceList_GP_Actual" runat="server" style="color: white" visible="false"><a class="nav-link" href="PriceList_GP_Actual.aspx" style="color: whitesmoke;">Price List GP (Actual)</a></li>
+                                            <li id="liPriceList_GP_ActualEstimate" runat="server" style="color: white" visible="false"><a class="nav-link" href="PriceList_GP_ActualEstimate.aspx" style="color: whitesmoke;">PriceList (GP) ActualEstimate</a></li>
+                                            <li id="liPriceList_Other_Actual" runat="server" style="color: white" visible="false"><a class="nav-link" href="PriceList_Other_Actual.aspx" style="color: whitesmoke;">PriceList Other Actual</a></li>
+                                            <li id="liMRP_Price" runat="server" style="color: white" visible="false"><a class="nav-link" href="MRP_Price.aspx" style="color: whitesmoke;">MRP Price</a></li>
+
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <%-----------------------------------------------%>
+
+                            <%--Estimation PriceList--%>
+                            <div id="DivPriceList" runat="server" visible="false">
+                                <a class="nav-link " data-bs-toggle="collapse" style="color: white; cursor: pointer" data-bs-target="#collapseLayoutsPriceList" aria-expanded="false" aria-controls="collapseLayoutsPriceList">
+                                    <div class="sb-nav-link-icon" id="DivPriceList1" runat="server" visible="false" style="color: whitesmoke;">
+                                        <img src="Content/icons/price-list.png" style="height:23px;width:25px" />
+                                        PriceList
+                                    </div>
+                                    <div class="sb-sidenav-collapse-arrow" id="DivArrPriceList" runat="server" visible="false"><i class="fas fa-angle-down"></i></div>
+
+                                </a>
+
+                                <div class="collapse" id="collapseLayoutsPriceList" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <ul id="ulPriceList" runat="server">
+                                            <li id="liPriceList" runat="server" style="color: white" visible="false"><a class="nav-link" href="PriceList.aspx" style="color: whitesmoke;">PriceList Report</a></li>
+                                            <li id="liEsitmationPriceList" runat="server" style="color: white" visible="false"><a class="nav-link" href="EstimatePriceList.aspx" style="color: whitesmoke;">Estimate PriceList</a></li>
+                                            <li id="liPriceLis_GP" runat="server" style="color: white" visible="false"><a class="nav-link" href="PriceList_GP.aspx" style="color: whitesmoke;">PriceList (GP)</a></li>
+                                        </ul>
+                                    </nav>
+
+                             <%--       <a class="nav-link " data-bs-toggle="collapse" style="color: white; cursor: pointer" data-bs-target="#collapseLayoutsPriceList1" aria-expanded="false" aria-controls="collapseLayoutsPriceList1">PriceList Other   
+                                        <div class="sb-sidenav-collapse-arrow" id="DivArrPriceListOther" runat="server" visible="true"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="collapseLayoutsPriceList1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <ul id="ulPriceListOther" runat="server">
+                                                <li id="liPriceListAgro" runat="server" style="color: white" visible="true"><a class="nav-link" href="PriceList.aspx" style="color: whitesmoke;">PriceList_Agro</a></li>
+                                                <li id="liPriceListGramofone" runat="server" style="color: white" visible="true"><a class="nav-link" href="EstimatePriceList.aspx" style="color: whitesmoke;">PriceList_Gramofone</a></li>
+                                                <li id="liPriceListMPPL" runat="server" style="color: white" visible="true"><a class="nav-link" href="PriceList_GP.aspx" style="color: whitesmoke;">PriceList_MPPL</a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>--%>
+                                </div>
+                            </div>
+                            <%-----------------------------------------------%>
+                        </div>
+                        <footer class="py-2  fixed-bottom ">
+                            <div class="d-flex align-items-center justify-content-between small">
+                                <div class="align-content-center ">Copyright &copy; Emen Infotech 2022</div>
+
+                            </div>
+                        </footer>
+                    </div>
+
+                </nav>
+
+            </div>
+        </div>
+        <div id="dvPages" runat="server">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+        <div id="dvAccessDenied" runat="server">
+
+            <div class="col-md-12 offset-2 mt-3">
+                <img src="Content/Images/AccessDenied.png" style="width: 1280px; height: 720px" />
+
+            </div>
+        </div>
+        <%--  <footer class="py-4 bg-light fixed-bottom " style="height: 4px">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="align-content-center offset-2">Copyright &copy; Emen Infotech 2021</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                               
+                            <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>--%>
+    </form>
+    <%--<script src="Content/bootstrap-5.1.0-dist/js/bootstrap.min.js"></script>--%>
+    <%--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9Ah60zEOg7Hlq2THRZ" crossorigin="anonymous"></script>--%>
+
+
+    <script src="Content/Admin/js/scripts.js"></script>
+    <%--<script src="Content/Other/bootstable.js"></script>--%>
+</body>
+
+</html>

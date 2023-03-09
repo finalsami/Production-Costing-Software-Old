@@ -1,0 +1,349 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AdminMaster.Master" AutoEventWireup="true" CodeBehind="TransportationCostFactors.aspx.cs" Inherits="Production_Costing_Software.TransportationCostFactors" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <div class="container-fluid ">
+        <script type="text/javascript">
+            function ShowPopup(title, body) {
+                $("#UnLoadingModal").modal("show");
+            }
+        </script>
+        <script type="text/javascript">
+            function ShowPopup1(title, body) {
+                $("#LocalCartageModal").modal("show");
+            }
+        </script>
+
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_content">
+                <main>
+                    <form runat="server">
+                        <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true"></asp:ScriptManager>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">Transportation Cost Factors</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item"><a href="TransportationCostFactors.aspx">Transportation Cost Factors</a></li>
+                            </ol>
+
+                            <div class="card mb-4">
+                                <asp:UpdatePanel ID="BOM_MasterUpdatePanel" runat="server" UpdateMode="Conditional">
+                                    <ContentTemplate>
+                                        <div class="card-header">
+                                            <i class="fas fa-table me-1"></i>
+                                            Transportation Cost Factors
+                           
+                                        </div>
+                                        <div class="card-body">
+
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <div class="form-floating">
+                                                        <asp:DropDownList ID="StatewiseDropdown" AppendDataBoundItems="true" AutoPostBack="true" class="form-select" runat="server"></asp:DropDownList>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-floating">
+                                                        <asp:TextBox ID="TruckloadChargetxt" OnTextChanged="TruckloadChargetxt_TextChanged" AutoPostBack="true" class="form-control" runat="server" TextMode="Number" placeholder="Truck load Charge"></asp:TextBox>
+                                                        <label for="TruckloadChargetxt">Truck load Charge</label>
+                                                    </div>
+                                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator12" ControlToValidate="TruckloadChargetxt" runat="server" ForeColor="Red" ErrorMessage="* Truck load Charge !"></asp:RequiredFieldValidator>--%>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-floating">
+                                                        <asp:TextBox ID="ApproxNoOfCartonIn1Lottxt" OnTextChanged="ApproxNoOfCartonIn1Lottxt_TextChanged" AutoPostBack="true" class="form-control" runat="server" TextMode="Number" placeholder="Approx. No Of carton in 1 Lot"></asp:TextBox>
+                                                        <label for="ApproxNoOfCartonIn1Lottxt">Approx No Of CartonIn 1 Lot</label>
+                                                    </div>
+                                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator2" ControlToValidate="ApproxNoOfCartonIn1Lottxt" runat="server" ForeColor="Red" ErrorMessage="* Approx. No Of carton in 1 Lot !"></asp:RequiredFieldValidator>--%>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <div class="form-floating">
+                                                        <asp:TextBox ID="Approx1CartonChargetxt" ReadOnly="true" class="form-control" runat="server" TextMode="Number" placeholder="Approx. 1 Carton Charge"></asp:TextBox>
+                                                        <label for="Approx1CartonChargetxt">Approx. 1 Carton Charge</label>
+                                                    </div>
+                                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" ControlToValidate="Approx1CartonChargetxt" runat="server" ForeColor="Red" ErrorMessage="* Approx. 1 Carton Charge !"></asp:RequiredFieldValidator>--%>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-floating">
+                                                        <asp:TextBox ID="AverageLocalTraspoationtxt" ClientIDMode="Static" class="form-control" runat="server" TextMode="Number" placeholder="Average Local Traspoation"></asp:TextBox>
+                                                        <label for="AverageLocalTraspoationtxt">Average Local Traspoation</label>
+                                                    </div>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ControlToValidate="AverageLocalTraspoationtxt" runat="server" ForeColor="Red" ErrorMessage="* Average Local Traspoation !"></asp:RequiredFieldValidator>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row  justify-content-center align-items-center mt-4">
+
+                                                <div class=" col-10 col-lg-4 col-lg-4">
+                                                    <div class="d-grid">
+                                                        <asp:Button ID="UpdateTransportationbtn" OnClick="UpdateTransportationbtn_Click" runat="server" Visible="false" Text="Update" class="btn btn-success btn-block" />
+                                                        <asp:Button ID="AddTransportationbtn" OnClick="AddTransportationbtn_Click" runat="server" Text="Add" class="btn btn-primary btn-block" />
+
+                                                    </div>
+                                                </div>
+                                                <div class=" col-10 col-lg-4 col-lg-4">
+                                                    <div class="d-grid">
+                                                        <asp:Button ID="CancelTransportationBtn" CausesValidation="false" OnClick="CancalTransportationBtn_Click" runat="server" Text="Cancel" class="btn btn-info btn-block" />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="card mb-4 overflow-scroll">
+
+
+                                            <asp:GridView ID="Grid_TransportationCostFactors" Autopostback="true" CssClass=" table-hover table-responsive gridview"
+                                                GridLines="None"
+                                                AllowPaging="true" PagerStyle-CssClass="gridview_pager"
+                                                AlternatingRowStyle-CssClass="gridview_alter"
+                                                runat="server" AutoGenerateColumns="False" DataKeyNames="TransportationCostFactors_Id">
+                                                <Columns>
+                                                    <asp:TemplateField HeaderText="No">
+                                                        <ItemTemplate>
+                                                            <asp:Label runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:BoundField DataField="StateName" HeaderText="State Name" SortExpression="MainCategory" />
+
+                                                    <asp:BoundField DataField="TotalTruckLoadCharge" HeaderText="Total-Truck-Load-Charge" SortExpression="BulkProductName" />
+
+                                                    <asp:BoundField DataField="ApproxNoOfCartonIn1Lot" HeaderText="Approx No Of CartonIn 1 Lot" SortExpression="BatchSize" />
+                                                    <asp:BoundField DataField="Approx1CartonCharge" HeaderText="Approx 1 Carton Charge" SortExpression="Measurement" />
+                                                    <asp:BoundField DataField="AverageLocalTraspoation" HeaderText="Average Local Traspoation" SortExpression="Measurement" />
+
+                                                    <asp:TemplateField HeaderText="Unloading Charge">
+                                                        <ItemTemplate>
+                                                            <%--<asp:Button ID="DelFormulationBtn" OnClick="DelFormulationBtn_Click" Text="Delete" runat="server" class="btn btn-danger btn-sm" />--%>
+                                                            <asp:Button ID="UnloadingChargeAddRangePopup" OnClick="UnloadingChargeAddRangePopup_Click" CausesValidation="false" Text="Add Range" runat="server" data-bs-toggle="modal" data-bs-target="#UnLoadingModal" class="btn btn-success btn-sm" />
+
+                                                        </ItemTemplate>
+
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Local Cartage">
+                                                        <ItemTemplate>
+                                                            <%--<asp:Button ID="DelFormulationBtn" OnClick="DelFormulationBtn_Click" Text="Delete" runat="server" class="btn btn-danger btn-sm" />--%>
+                                                            <asp:Button ID="LocalCartageAddRangePopup" OnClientClick="ShowPopup1" OnClick="LocalCartageAddRangePopup_Click" CausesValidation="false" Text="Add range" runat="server" data-bs-toggle="modal" data-bs-target="#LocalCartageModal" class="btn btn-success btn-sm" />
+
+                                                        </ItemTemplate>
+
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Action" ItemStyle-Width="200px">
+                                                        <ItemTemplate>
+                                                            <asp:Button ID="DelTransportationCostFactorBtn" OnClick="DelTransportationCostFactorsBtn_Click" ValidationGroup="DelTrans" Text="Delete" runat="server" Style="width: 80px" class="btn btn-danger btn-sm" />
+                                                            <asp:Button ID="EditTransportationCostFactorBtn" OnClick="EditTransportationCostFactorsBtn_Click" ValidationGroup="UpdateTrans" Text="Edit" runat="server" Style="width: 80px" class="btn btn-secondary btn-sm" />
+
+                                                        </ItemTemplate>
+
+                                                    </asp:TemplateField>
+                                                </Columns>
+
+                                            </asp:GridView>
+                                        </div>
+                                        </div>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+                            </div>
+                            <div class="modal fade " id="UnLoadingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content col-lg-12">
+                                        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                                            <ContentTemplate>
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                        <h6>Unloading Charge : [<asp:Label ID="lblStateName" CssClass="font-monospace" runat="server" Text="/" Visible="true"></asp:Label>]
+                                                        </h6>
+                                                        <%--<h6>/ Name : [<asp:Label ID="lblBPM_Name" CssClass="font-monospace" runat="server" Text="/" Visible="true"></asp:Label>]</h6>
+                                                                <h6>/ Batch Size : [<asp:Label ID="lblBatchSize" CssClass="font-monospace" runat="server" Text="/" Visible="true"></asp:Label>]</h6>
+                                                                <h5></h5>
+                                                                <h5></h5>
+                                                                <h5></h5>
+                                                                <h5></h5>
+                                                                <h5></h5>--%>
+                                                    </h5>
+                                                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button">
+                                                    </button>
+                                                </div>
+                                                <asp:Label ID="lblState_Id" runat="server" Text="" Visible="false"></asp:Label>
+                                                <asp:Label ID="lbltransportationCostFactor_Id" runat="server" Text="" Visible="false"></asp:Label>
+                                                <div class="modal-body">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-3">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text" id="UnloadingChargeStart">Start</span>
+                                                                <asp:TextBox ID="UnloadingChargeStarttxt" class="form-control" TextMode="Number" runat="server"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text" id="UnloadingChargeEnd">End</span>
+                                                                <asp:TextBox ID="UnloadingChargeEndtxt" class="form-control" TextMode="Number" runat="server"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <div class="input-group ">
+                                                                <span class="input-group-text" id="UnitMeasurementDropdownCombo">Unit Measurement</span>
+
+                                                                <asp:DropDownList ID="UnitMeasurementDropdownList" AutoPostBack="true" class="form-select" runat="server">
+                                                                </asp:DropDownList>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text" id="UnloadingChargeAmount">Amount</span>
+                                                                <asp:TextBox ID="UnloadingChargeAmounttxt" class="form-control" TextMode="Number" runat="server"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row  justify-content-center align-items-center mt-4">
+
+                                                            <div class=" col-10 col-lg-4 col-lg-4">
+                                                                <div class="d-grid">
+                                                                    <asp:Button ID="UpdateUnloadingChargelBtn" OnClick="UpdateUnloadingChargelBtn_Click1" ValidationGroup="Add" runat="server" Text="Update" class="btn btn-success btn-sm mt-1" />
+                                                                    <asp:Button ID="AddUnloadingChargelBtn" OnClick="AddUnloadingChargelBtn_Click" ValidationGroup="Add" runat="server" Text="ADD" class="btn btn-primary btn-sm mt-1" />
+
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-10 col-lg-4 col-lg-4">
+                                                                <div class="d-grid">
+                                                                    <asp:Button ID="CancelUnloadingChargelBtn" ValidationGroup="Cancel" OnClick="CancelUnloadingChargelBtn_Click" runat="server" Text="Cancel" class="btn btn-info btn-sm mt-1" />
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <asp:Label ID="lbltransportationUnloadingCharge_Id" runat="server" Text="" Visible="false"></asp:Label>
+                                                <div class=" mt-4 overflow-scroll">
+                                                    <asp:GridView ID="Grid_UnloadingCharge" Autopostback="true" CssClass="table table-hover table-responsive"
+                                                        runat="server" AutoGenerateColumns="False" ShowFooter="True" DataKeyNames="TransportUnloadingCharge_Id">
+                                                        <Columns>
+                                                            <asp:TemplateField HeaderText="No">
+                                                                <ItemTemplate>
+                                                                    <asp:Label runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+
+                                                            <asp:BoundField DataField="StateName" HeaderText="StateName" SortExpression="StateName" />
+                                                            <asp:BoundField DataField="UnloadingStart" HeaderText="UnloadingStart" SortExpression="UnloadingStart" />
+                                                            <asp:BoundField DataField="UnloadingEnd" HeaderText="UnloadingEnd" SortExpression="UnloadingEnd" />
+                                                            <asp:BoundField DataField="UnloadingAmount" HeaderText="UnloadingAmount" SortExpression="UnloadingAmount" />
+                                                            <asp:BoundField DataField="UnitMeasurement" HeaderText="UnitMeasurement" SortExpression="UnitMeasurement" />
+                                                            <asp:TemplateField HeaderText="Action">
+                                                                <ItemTemplate>
+                                                                    <asp:Button ID="DelUnloadingChargeBtn" OnClick="DelUnloadingChargeBtn_Click1" ValidationGroup="Del" Text="Delete" Style="width: 80px" runat="server" class="btn btn-danger btn-sm" />
+                                                                    <asp:Button ID="EditUnloadingChargeBtn" OnClick="EditUnloadingChargeBtn_Click1" ValidationGroup="Edit" Text="Edit" Style="width: 80px" runat="server" class="btn btn-success btn-sm" />
+                                                                </ItemTemplate>
+
+                                                            </asp:TemplateField>
+                                                        </Columns>
+
+                                                    </asp:GridView>
+                                                </div>
+
+                                            </ContentTemplate>
+
+                                        </asp:UpdatePanel>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade " id="LocalCartageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content col-lg-12">
+                                        <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                                            <ContentTemplate>
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel123">
+                                                        <h6>Local Cartage Charge : [<asp:Label ID="lblLocalCartageState" CssClass="font-monospace" runat="server" Text="/" Visible="true"></asp:Label>
+                                                        ]
+                                                                
+                                                    </h5>
+                                                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button">
+                                                    </button>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-3">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text" id="LocalCartageStart">Start</span>
+                                                                <asp:TextBox ID="LocalCartageStarttxt" class="form-control" TextMode="Number" runat="server"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text" id="LocalCartageEnd">End</span>
+                                                                <asp:TextBox ID="LocalCartageEndtxt" class="form-control" TextMode="Number" runat="server"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="input-group ">
+                                                                <span class="input-group-text" id="UnitMeasurementDropdownCombo2">Unit Measurement</span>
+
+                                                                <asp:DropDownList ID="UnitMeasurementDropdownLocalCartageList" AutoPostBack="true" class="form-select" runat="server">
+                                                                </asp:DropDownList>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text" id="LocalCartageAmount">Amount</span>
+                                                                <asp:TextBox ID="LocalCartageAmounttxt" class="form-control" TextMode="Number" runat="server"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row  justify-content-center align-items-center mt-4">
+
+                                                            <div class=" col-10 col-lg-4 col-lg-4">
+                                                                <div class="d-grid">
+                                                                    <asp:Button ID="UpdateLocalCartageBtn" OnClick="UpdateLocalCartageBtn_Click" Visible="false" ValidationGroup="Update" runat="server" Text="Update" class="btn btn-secondary btn-sm mt-1" />
+                                                                    <asp:Button ID="AddLocalCartageBtn" OnClick="AddLocalCartageBtn_Click" ValidationGroup="Add" runat="server" Text="ADD" class="btn btn-primary btn-sm mt-1" />
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3 modal-footer modal-dialog-scrollable  overflow-scroll">
+
+                                                        <asp:GridView ID="Grid_LocalCartage" Autopostback="true" CssClass="table table-hover table-responsive"
+                                                            runat="server" AutoGenerateColumns="False" ShowFooter="True" DataKeyNames="TransportLocalCartageCharge_Id">
+                                                            <Columns>
+                                                                <asp:TemplateField HeaderText="No">
+                                                                    <ItemTemplate>
+                                                                        <asp:Label runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateField>
+
+                                                                <asp:BoundField DataField="LocalCartageStart" HeaderText="Range Start" SortExpression="Ingrdient_Name" />
+                                                                <asp:BoundField DataField="LocalCartageEnd" HeaderText="Range End" SortExpression="Ingrdient_Name" />
+                                                                <asp:BoundField DataField="LocalCartageAmount" HeaderText="Amount" SortExpression="Ingrdient_Name" />
+                                                                <asp:BoundField DataField="UnitMeasurement" HeaderText="UnitMeasurement" SortExpression="Ingrdient_Name" />
+                                                                <asp:TemplateField HeaderText="Action">
+                                                                    <ItemTemplate>
+                                                                        <asp:Button ID="DellocalCartageBtn" OnClick="DellocalCartageBtn_Click1" ValidationGroup="Del" Text="Delete" Style="width: 80px" runat="server" class="btn btn-danger btn-sm" />
+                                                                        <asp:Button ID="EditLocalCartageBtn" OnClick="EditLocalCartageBtn_Click1" ValidationGroup="Edit" Text="Edit" Style="width: 80px" runat="server" class="btn btn-success btn-sm" />
+                                                                    </ItemTemplate>
+
+                                                                </asp:TemplateField>
+
+                                                            </Columns>
+
+                                                        </asp:GridView>
+
+                                                    </div>
+                                            </ContentTemplate>
+
+                                        </asp:UpdatePanel>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </main>
+
+            </div>
+        </div>
+    </div>
+
+</asp:Content>
